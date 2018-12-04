@@ -1,5 +1,7 @@
 import sys
-import chat_server as chat
+#import chat_server.py as server
+import chat_cmdl_class.py as cmclass
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
@@ -15,7 +17,7 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(310, 40, 311, 16))
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(350, 70, 101, 16))
+        self.label_2.setGeometry(QtCore.QRect(350, 70, 200, 16))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(250, 120, 71, 16))
@@ -23,6 +25,7 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(340, 170, 114, 32))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(self.log_bnt_click)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
@@ -43,7 +46,22 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "user name"))
         self.pushButton.setText(_translate("MainWindow", "log in"))
 
-    def bnt_click(self):
+    def log_bnt_click(self):
+        user = cmclass.Client()
+        user_name = self.lineEdit.text()
+        if user_name == '':
+            self.label_2.setText('please enter a valid user name')
+        else:
+            user.console_input.append(user_name)
+            login_status = user.login()
+            if login_status:
+                self.label_2.setText('log in successfully')
+            else:
+                text = user.system_msg.pop(0)
+                self.label_2.setText(text)
+
+            #response =
+            #self.label_2.setText()
 
 
 
