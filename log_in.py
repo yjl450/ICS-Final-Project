@@ -13,6 +13,7 @@ import chat_client_class as cmclass
 import botton_click as click
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QCoreApplication
+import chat
 
 class Ui_log_in(object):
     def setupUi(self, log_in):
@@ -78,7 +79,7 @@ class Ui_log_in(object):
                                          QMessageBox.Ok,QMessageBox.Ok)
             if reply == QMessageBox.Ok:
                 QCoreApplication.quit()
-
+                chat.main()
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = QtWidgets.QMainWindow()
