@@ -1,10 +1,14 @@
 import socket
 import time
+import platform
 
 # use local loop back address by default
-#CHAT_IP = '127.0.0.1'
-# CHAT_IP = socket.gethostbyname(socket.gethostname())
-CHAT_IP = ''#socket.gethostbyname(socket.gethostname())
+#CHAT_IP = '127.0.0.1' choose based on OS
+if 'Windows' in platform.system():
+    CHAT_IP = socket.gethostbyname(socket.gethostname())
+else:
+    CHAT_IP = ''#socket.gethostbyname(socket.gethostname())
+
 
 CHAT_PORT = 1112
 SERVER = (CHAT_IP, CHAT_PORT)
