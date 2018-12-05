@@ -2,22 +2,22 @@ def face_recog():
     import time
     import face_recognition
     import cv2
-    list = open('facelib\\user.txt', 'r')
+    list = open('facelib/user.txt', 'r')
 
     # Get a reference to webcam #0 (the default one)
     video_capture = cv2.VideoCapture(0)
     faces = eval(list.readline())
     recog = locals()
     # Load a sample picture and learn how to recognize it.
-    # obama_image = face_recognition.load_image_file("facelib\\obama.jpg")
+    # obama_image = face_recognition.load_image_file("facelib/obama.jpg")
     # obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     #
-    # helium_image = face_recognition.load_image_file("facelib\\helium.jpg")
+    # helium_image = face_recognition.load_image_file("facelib/helium.jpg")
     # helium_face_encoding = face_recognition.face_encodings(helium_image)[0]
     known_face_encodings = []
     known_face_names = []
     for i in faces:
-        recog[i +'_image'] = face_recognition.load_image_file("facelib\\" + i + '.jpg')
+        recog[i +'_image'] = face_recognition.load_image_file("facelib/" + i + '.jpg')
         recog[i + '_face_encoding'] = face_recognition.face_encodings(recog[i +'_image'])[0]
         known_face_encodings.append(recog[i + '_face_encoding'])
     known_face_names = faces
@@ -88,7 +88,7 @@ def face_recog():
 def reg(path, name):
     from PIL import Image
     import face_recognition
-    list = open('facelib\\user.txt', 'r')
+    list = open('facelib/user.txt', 'r')
     users = eval(list.readline())
     list.close()
 
@@ -111,11 +111,11 @@ def reg(path, name):
     # You can access the actual face itself like this:
     face_image = image[top:bottom, left:right]
     pil_image = Image.fromarray(face_image)
-    list = open('facelib\\user.txt', 'w')
+    list = open('facelib/user.txt', 'w')
     users.append(name)
     list.write(str(users))
     list.close()
-    pil_image.save('facelib\\' + name+'.jpg', 'JPEG')
+    pil_image.save('facelib/' + name+'.jpg', 'JPEG')
     return True
 
 if __name__ == '__main__':
