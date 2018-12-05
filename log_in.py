@@ -12,8 +12,10 @@ from PyQt5.QtWidgets import QMessageBox,QApplication
 import chat_client_class as cmclass
 import botton_click as click
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QCoreApplication
 import chat
+import chat_face_recog
 
 class Ui_log_in(object):
     def setupUi(self, log_in):
@@ -22,9 +24,9 @@ class Ui_log_in(object):
         self.login = log_in
         self.centralwidget = QtWidgets.QWidget(log_in)
         self.centralwidget.setObjectName("centralwidget")
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(200, 140, 131, 21))
-        self.lineEdit.setObjectName("lineEdit")
+        self.newUserName = QtWidgets.QLineEdit(self.centralwidget)
+        self.newUserName.setGeometry(QtCore.QRect(200, 140, 131, 21))
+        self.newUserName.setObjectName("newUserName")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(170, 30, 341, 21))
         self.label.setObjectName("label")
@@ -34,18 +36,15 @@ class Ui_log_in(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(110, 140, 71, 20))
         self.label_3.setObjectName("label_3")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(210, 80, 114, 32))
-        self.pushButton.setObjectName("pushButton")
+        self.log_bnt = QtWidgets.QPushButton(self.centralwidget)
+        self.log_bnt.setGeometry(QtCore.QRect(210, 80, 114, 32))
+        self.log_bnt.setObjectName("log_bnt")
         # 现在暂时把log in 这个button和输入user name 联系起来了 请之后自行修改
-        self.pushButton.clicked.connect(self.log_bnt_click)
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(190, 170, 151, 31))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(60, 140, 151, 16))
-        self.label_4.setText("")
-        self.label_4.setObjectName("label_4")
+        self.log_bnt.clicked.connect(self.log_bnt_click)
+        self.reg_bnt = QtWidgets.QPushButton(self.centralwidget)
+        self.reg_bnt.setGeometry(QtCore.QRect(190, 170, 151, 31))
+        self.reg_bnt.setObjectName("reg_bnt")
+        self.reg_bnt.clicked.connect(self.reg_bnt_click)
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(170, 110, 221, 31))
         self.label_5.setObjectName("label_5")
@@ -63,12 +62,12 @@ class Ui_log_in(object):
 
     def retranslateUi(self, log_in):
         _translate = QtCore.QCoreApplication.translate
-        log_in.setWindowTitle(_translate("log_in", "MainWindow"))
+        log_in.setWindowTitle(_translate("self", "Login"))
         self.label.setText(_translate("log_in", "Welcome to final chat system!"))
         self.label_2.setText(_translate("log_in", "Click login with your name!"))
         self.label_3.setText(_translate("log_in", "user name"))
-        self.pushButton.setText(_translate("log_in", "log in"))
-        self.pushButton_2.setText(_translate("log_in", "register your face"))
+        self.log_bnt.setText(_translate("log_in", "log in"))
+        self.reg_bnt.setText(_translate("log_in", "register your face"))
         self.label_5.setText(_translate("log_in", "wanna secure your account?"))
 
     def jump_to_chat(self):
@@ -81,14 +80,38 @@ class Ui_log_in(object):
         self.login.show()
 
     def log_bnt_click(self):
-        user_name = self.lineEdit.text()
-        a = click.log_in_botton(user_name,self.label_2)
-        if a:
-            reply = QMessageBox.question(None,'welcome!',
-                                         "log in successfully",
-                                         QMessageBox.Ok,QMessageBox.Ok)
-            if reply == QMessageBox.Ok:
-                self.jump_to_chat()
+        user_name = chat_face_recog.face_recog()
+        if user_name != '$$$Unknown$$$' and user_name != '$$$Timeout$$$':
+            a = click.log_in_botton(user_name, self.label_2)
+            if a:
+                reply = QMessageBox.question(None, 'welcome!',
+                                             "log in successfully",
+                                             QMessageBox.Ok, QMessageBox.Ok)
+                if reply == QMessageBox.Ok:
+                    self.jump_to_chat()
+        elif user_name != '$$$Unknown$$$':
+            reply = QMessageBox.question(None, 'Unknown Face','Please register your face before login!',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+        else:
+            reply = QMessageBox.question(None, 'Timeout','Failed to detect face!',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+
+    def reg_bnt_click(self):
+        path, type = QFileDialog.getOpenFileName(None,
+                                                 "Register your photo",
+                                                 "",
+                                                 "All Files (*);;Image File (*.jpg)")
+        name = self.newUserName.text()
+        reg_result = chat_face_recog.reg(path, name)
+        if reg_result == True:
+            reply = QMessageBox.question(None, 'Success', 'User' + name + ' is successfully registered!\n You can login now!',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+        elif reg_result == 'User already exists':
+            reply = QMessageBox.question(None, 'Existing User', 'User ' + name + ' already exists!',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+        elif reg_result == 'No face Detected':
+            reply = QMessageBox.question(None, 'Invalid Photo', 'No face detected in the photo!\nPlease select another photo!',
+                                         QMessageBox.Ok, QMessageBox.Ok)
 
 
 def main():
