@@ -71,24 +71,30 @@ class Ui_log_in(object):
         self.pushButton_2.setText(_translate("log_in", "register your face"))
         self.label_5.setText(_translate("log_in", "wanna secure your account?"))
 
-    def jump_to_chat(self):
-        self.login.close()
-        form2 = QtWidgets.QDialog()
-        ui = chat.Ui_chat()
-        ui.setupUi(form2)
-        form2.show()
-        form2.exec_()
         #self.login.show()
 
     def log_bnt_click(self):
         user_name = self.lineEdit.text()
-        a = click.log_in_botton(user_name,self.label_2)
+        a, user = click.log_in_botton(user_name,self.label_2)
         if a:
             reply = QMessageBox.question(None,'welcome!',
                                          "log in successfully",
                                          QMessageBox.Ok,QMessageBox.Ok)
             if reply == QMessageBox.Ok:
-                self.jump_to_chat()
+                self.login.close()
+                form2 = QtWidgets.QDialog()
+                ui = chat.Ui_chat(user)
+                ui.setupUi(form2)
+                form2.show()
+                form2.exec_()
+
+    #def jump_to_chat(self):
+        #self.login.close()
+        #form2 = QtWidgets.QDialog()
+        #ui = chat.Ui_chat(self.user)
+        #ui.setupUi(form2)
+        #form2.show()
+        #form2.exec_()
 
 
 def main():
@@ -98,6 +104,8 @@ def main():
     ui.setupUi(window)
     window.show()
     sys.exit(app.exec_())
+
+
 
 
 if __name__ == '__main__':

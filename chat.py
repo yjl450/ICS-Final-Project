@@ -7,8 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import botton_click as click
+import log_in as log
 class Ui_chat(object):
+    def __init__(self,user):
+        self.user = user
+
     def setupUi(self, chat):
         chat.setObjectName("chat")
         chat.resize(541, 384)
@@ -19,6 +23,7 @@ class Ui_chat(object):
         self.pushButton.setGeometry(QtCore.QRect(410, 280, 114, 32))
         self.pushButton.setCheckable(False)
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(lambda:self.send_bnt_click())
         self.pushButton_2 = QtWidgets.QPushButton(chat)
         self.pushButton_2.setGeometry(QtCore.QRect(410, 320, 114, 32))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -44,6 +49,13 @@ class Ui_chat(object):
         self.textBrowser.append(' ? _term_: to search your chat logs where _term_ appears')
         self.textBrowser.append('p _#_: to get number <#> sonnet')
         self.textBrowser.append('q: to leave the chat system\n')
+
+    def send_bnt_click(self):
+        text = self.textEdit.toPlainText()
+        self.textEdit.clear()
+        self.textBrowser.append('[me]'+text)
+        message = click.send_button(self.user, text)
+        self.textBrowser.append(message)
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
