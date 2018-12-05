@@ -63,7 +63,7 @@ class Ui_log_in(object):
 
     def retranslateUi(self, log_in):
         _translate = QtCore.QCoreApplication.translate
-        log_in.setWindowTitle(_translate("log_in", "MainWindow"))
+        log_in.setWindowTitle(_translate("log_in", "Log in"))
         self.label.setText(_translate("log_in", "Welcome to final chat system!"))
         self.label_2.setText(_translate("log_in", "Click login with your name!"))
         self.label_3.setText(_translate("log_in", "user name"))
@@ -72,13 +72,13 @@ class Ui_log_in(object):
         self.label_5.setText(_translate("log_in", "wanna secure your account?"))
 
     def jump_to_chat(self):
-        self.login.hide()
+        self.login.close()
         form2 = QtWidgets.QDialog()
         ui = chat.Ui_chat()
         ui.setupUi(form2)
         form2.show()
         form2.exec_()
-        self.login.show()
+        #self.login.show()
 
     def log_bnt_click(self):
         user_name = self.lineEdit.text()
