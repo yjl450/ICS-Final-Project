@@ -53,12 +53,13 @@ def face_recog():
             face_names = []
             for face_encoding in face_encodings:
                 # See if the face is a match for the known face(s)
-                matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-                name = "Unknown"
+                matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.5)
+                name = "$$$Unknown$$$"
                 # If a match was found in known_face_encodings, just use the first one.
                 if True in matches:
                     first_match_index = matches.index(True)
                     name = known_face_names[first_match_index]
+                    # print(name)
                     video_capture.release()
                     cv2.destroyAllWindows()
                     return name
@@ -67,7 +68,7 @@ def face_recog():
 
 
         cv2.imshow('Video', frame)
-        if time == 200:
+        if time == 50:
             if name == '$$$Unknown$$$':
                 break
             else:
@@ -116,3 +117,6 @@ def reg(path, name):
     list.close()
     pil_image.save('facelib\\' + name+'.jpg', 'JPEG')
     return True
+
+if __name__ == '__main__':
+    print(face_recog())

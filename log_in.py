@@ -80,6 +80,27 @@ class Ui_log_in(object):
     #     self.login.show()
 
     def log_bnt_click(self):
+
+        # test only ----------------------------------------------------------------------
+        user_name = self.newUserName.text()
+        if user_name == "":
+            self.face_log()
+        else:
+            a, user = click.log_in_botton(user_name, self.label_2)
+            if a:
+                reply = QMessageBox.question(None, 'welcome!',
+                                             "log in successfully",
+                                             QMessageBox.Ok, QMessageBox.Ok)
+                if reply == QMessageBox.Ok:
+                    self.login.close()
+                    form2 = QtWidgets.QDialog()
+                    ui = chat.Ui_chat(user)
+                    ui.setupUi(form2)
+                    form2.show()
+                    form2.exec_()
+        # test code ends -----------------------------------------------------------------
+
+    def face_log(self):
         user_name = chat_face_recog.face_recog()
         if user_name != '$$$Unknown$$$' and user_name != '$$$Timeout$$$':
             a, user = click.log_in_botton(user_name, self.label_2)
@@ -116,6 +137,7 @@ class Ui_log_in(object):
                 reply = QMessageBox.question(None, 'Success',
                                              'User ' + name + ' is successfully registered!\n You can login now!',
                                              QMessageBox.Ok, QMessageBox.Ok)
+                self.newUserName.clear()
             elif reg_result == 'User already exists':
                 reply = QMessageBox.question(None, 'Existing User', 'User ' + name + ' already exists!',
                                              QMessageBox.Ok, QMessageBox.Ok)
