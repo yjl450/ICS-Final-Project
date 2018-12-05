@@ -49,7 +49,7 @@ def main():
     ui = Ui_chat()
     ui.setupUi(window)
     window.show()
-    sys.exit(app.exec_())
+    app.exec_()
 
 
 if __name__ == '__main__':
