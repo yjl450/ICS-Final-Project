@@ -82,7 +82,7 @@ class Ui_log_in(object):
     def log_bnt_click(self):
         user_name = chat_face_recog.face_recog()
         if user_name != '$$$Unknown$$$' and user_name != '$$$Timeout$$$':
-            a = click.log_in_botton(user_name, self.label_2)
+            a, user = click.log_in_botton(user_name, self.label_2)
             if a:
                 reply = QMessageBox.question(None, 'welcome!',
                                              "log in successfully",
