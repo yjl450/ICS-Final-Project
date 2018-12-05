@@ -22,4 +22,13 @@ def log_in_botton(user_name,label):
             text = user.system_msg
             label.setText(text)
             logged = False
-    return logged
+    return logged,user
+
+
+def send_button(user,text):
+    user.console_input.append(text)
+    user.proc()
+    message = user.output()
+    return message
+
+

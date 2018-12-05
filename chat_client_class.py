@@ -57,7 +57,9 @@ class Client:
     def output(self):
         if len(self.system_msg) > 0:
             print(self.system_msg)
+            msg = self.system_msg
             self.system_msg = ''
+            return msg
 
     def login(self):
         my_msg, peer_msg = self.get_msgs()
@@ -70,7 +72,8 @@ class Client:
                 self.state = S_LOGGEDIN
                 self.sm.set_state(S_LOGGEDIN)
                 self.sm.set_myname(self.name)
-                self.print_instructions()
+                # because i have manually did that in chat.py, we dont need this line then
+                #self.print_instructions()
                 return (True)
             elif response["status"] == 'duplicate':
                 self.system_msg += 'Duplicate username, try again'

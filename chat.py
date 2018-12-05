@@ -7,8 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import botton_click as click
+import log_in as log
 class Ui_chat(object):
+    def __init__(self,user):
+        self.user = user
+
     def setupUi(self, chat):
         chat.setObjectName("chat")
         chat.resize(541, 384)
@@ -19,6 +23,7 @@ class Ui_chat(object):
         self.pushButton.setGeometry(QtCore.QRect(410, 280, 114, 32))
         self.pushButton.setCheckable(False)
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(lambda:self.send_bnt_click())
         self.pushButton_2 = QtWidgets.QPushButton(chat)
         self.pushButton_2.setGeometry(QtCore.QRect(410, 320, 114, 32))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -34,14 +39,23 @@ class Ui_chat(object):
 
     def retranslateUi(self, chat):
         _translate = QtCore.QCoreApplication.translate
-        chat.setWindowTitle(_translate("chat", "Dialog"))
+        chat.setWindowTitle(_translate("chat", "Chat"))
         self.pushButton.setText(_translate("chat", "send"))
         self.pushButton_2.setText(_translate("chat", "clear"))
-        self.textBrowser.setHtml(_translate("chat", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p></body></html>"))
+        self.textBrowser.setHtml("\n++++ Choose one of the following commands")
+        self.textBrowser.append('time: calendar time in the system')
+        self.textBrowser.append('who: to find out who else are there')
+        self.textBrowser.append('c _peer_: to connect to the _peer_ and chat')
+        self.textBrowser.append(' ? _term_: to search your chat logs where _term_ appears')
+        self.textBrowser.append('p _#_: to get number <#> sonnet')
+        self.textBrowser.append('q: to leave the chat system\n')
+
+    def send_bnt_click(self):
+        text = self.textEdit.toPlainText()
+        self.textEdit.clear()
+        self.textBrowser.append('[me]'+text)
+        message = click.send_button(self.user, text)
+        self.textBrowser.append(message)
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
