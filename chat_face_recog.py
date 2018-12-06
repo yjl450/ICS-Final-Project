@@ -81,7 +81,6 @@ def face_recog():
 
     # Release handle to the webcam
     video_capture.release()
-    window.close()
     cv2.destroyAllWindows()
 
     return name

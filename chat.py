@@ -23,6 +23,7 @@ class Ui_chat(object):
     def setupUi(self, chat):
         chat.setObjectName("chat")
         chat.resize(541, 384)
+        self.chat = chat
         self.textEdit = QtWidgets.QTextEdit(chat)
         self.textEdit.setGeometry(QtCore.QRect(30, 250, 361, 111))
         self.textEdit.setObjectName("textEdit")
@@ -62,8 +63,17 @@ class Ui_chat(object):
         self.textEdit.clear()
         self.textBrowser.append('[me]'+text)
         self.textBrowser.append('')
+        if text == 'q' and self.user.state == 2:
+            reply = QMessageBox.question(None, 'Bye',
+                                         'See you next time!',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+            if reply == QMessageBox.Ok:
+                self.chat.close()
+                return
+
         #message =
         click.send_button(self.user, text)
+
         #if message!= '':
             #self.textBrowser.append(message)
 

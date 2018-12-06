@@ -64,7 +64,7 @@ def myrecv(s):
             print('disconnected')
             return('')
         size += text
-    print(size)
+    #print(size)
     size = int(size)
     #now receive message
     msg = ''
