@@ -27,8 +27,8 @@ def log_in_botton(user_name,label):
 
 def send_button(user,text):
     user.console_input.append(text)
-    user.proc()
-    message = user.output()
-    return message
+    #user.proc()
+    #message = user.output()
+    #return message
 
 

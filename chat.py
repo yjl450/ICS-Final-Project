@@ -9,9 +9,16 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import botton_click as click
 import log_in as log
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
 class Ui_chat(object):
     def __init__(self,user):
         self.user = user
+        self.thread = Rmessage(self.user)
+        self.thread.start()
+        self.thread.sinOut.connect(self.rec_msg)
 
     def setupUi(self, chat):
         chat.setObjectName("chat")
@@ -54,18 +61,57 @@ class Ui_chat(object):
         text = self.textEdit.toPlainText()
         self.textEdit.clear()
         self.textBrowser.append('[me]'+text)
-        message = click.send_button(self.user, text)
-        self.textBrowser.append(message)
+        self.textBrowser.append('')
+        #message =
+        click.send_button(self.user, text)
+        #if message!= '':
+            #self.textBrowser.append(message)
+
+    def rec_msg(self,msg):
+        if msg!= '':
+            self.textBrowser.append(msg)
+            self.textBrowser.append('  ')
+
+
+
+class Rmessage(QThread):
+    sinOut = pyqtSignal(str)
+
+    def __init__(self, user, parent=None):
+        super(Rmessage, self).__init__(parent)
+        self.working = True
+        self.user = user
+
+    def __del__(self):
+        self.working = False
+        self.wait()
+
+    def run(self):
+        while self.working == True:
+            try:
+                self.user.proc()
+                message = self.user.output()
+                self.sinOut.emit(message)
+            except:
+                pass
+
+# ------ test code ------
+# this part will not be called and is rewritten in log_in.py
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = QtWidgets.QDialog()
     ui = Ui_chat()
+    # technically we need to put a parameter as user here. we do that in the login in
     ui.setupUi(window)
     window.show()
     app.exec_()
 
 
+
+
+
 if __name__ == '__main__':
     main()
 
+#----- test code end ------
