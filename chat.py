@@ -26,12 +26,12 @@ class Ui_chat(object):
 
     def setupUi(self, chat):
         chat.setObjectName("Chat") # whole window
-        chat.resize(566, 467)
+        chat.resize(613, 590)
         self.chat = chat
-        chat.setMinimumSize(QtCore.QSize(566, 467))
-        chat.setMaximumSize(QtCore.QSize(566, 467))
+        chat.setMinimumSize(QtCore.QSize(613, 590))
+        chat.setMaximumSize(QtCore.QSize(613, 590))
         self.textEdit = QtWidgets.QTextEdit(chat) # Input Box
-        self.textEdit.setGeometry(QtCore.QRect(30, 330, 361, 111))
+        self.textEdit.setGeometry(QtCore.QRect(40, 410, 361, 141))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
@@ -39,7 +39,7 @@ class Ui_chat(object):
         self.textEdit.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.textEdit.setObjectName("textEdit")
         self.pushButton = QtWidgets.QPushButton(chat) # Send Button
-        self.pushButton.setGeometry(QtCore.QRect(420, 330, 120, 111))
+        self.pushButton.setGeometry(QtCore.QRect(440, 410, 141, 141))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
@@ -47,16 +47,15 @@ class Ui_chat(object):
         self.pushButton.setCheckable(False)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(lambda: self.send_bnt_click())
-        self.clear = QtWidgets.QPushButton(chat) # Clear Button
-        self.clear.setGeometry(QtCore.QRect(420, 240, 120, 60))
+        self.search = QtWidgets.QPushButton(chat) # Clear Button
+        self.search.setGeometry(QtCore.QRect(440, 208, 141, 46))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.clear.setFont(font)
-        self.clear.setObjectName("clear")
-        self.clear.clicked.connect(lambda: self.clear_screen())
+        self.search.setFont(font)
+        self.search.setObjectName("search")
         self.textBrowser = QtWidgets.QTextBrowser(chat) # Message Display
-        self.textBrowser.setGeometry(QtCore.QRect(30, 30, 361, 271))
+        self.textBrowser.setGeometry(QtCore.QRect(40, 30, 361, 341))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
@@ -64,27 +63,41 @@ class Ui_chat(object):
         self.textBrowser.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.textBrowser.setObjectName("textBrowser")
         self.TransLan = QtWidgets.QComboBox(chat) # translation language
-        self.TransLan.setGeometry(QtCore.QRect(420, 30, 120, 32))
+        self.TransLan.setGeometry(QtCore.QRect(440, 30, 141, 46))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
         self.TransLan.setFont(font)
         self.TransLan.setObjectName("TransLan")
-        self.TransLan.addItem("Default(Eng)")
         self.translate = QtWidgets.QPushButton(chat) # translate button
-        self.translate.setGeometry(QtCore.QRect(420, 80, 120, 60))
+        self.translate.setGeometry(QtCore.QRect(440, 90, 141, 46))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
         self.translate.setFont(font)
         self.translate.setObjectName("translate")
         self.connect = QtWidgets.QPushButton(chat) # connet button
-        self.connect.setGeometry(QtCore.QRect(420, 160, 120, 60))
+        self.connect.setGeometry(QtCore.QRect(440, 149, 141, 46))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
         self.connect.setFont(font)
         self.connect.setObjectName("connect")
+        self.time = QtWidgets.QPushButton(chat)
+        self.time.setGeometry(QtCore.QRect(440, 268, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.time.setFont(font)
+        self.time.setObjectName("time")
+        self.clear = QtWidgets.QPushButton(chat)
+        self.clear.setGeometry(QtCore.QRect(440, 325, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.clear.setFont(font)
+        self.clear.setObjectName("clear")
+        self.clear.clicked.connect(lambda: self.clear_screen())
         self.retranslateUi(chat)
         QtCore.QMetaObject.connectSlotsByName(chat)
 
@@ -93,6 +106,8 @@ class Ui_chat(object):
         chat.setWindowTitle(_translate("chat", "Chat"))
         self.pushButton.setText(_translate("chat", "Send"))
         self.clear.setText(_translate("chat", "Clear"))
+        self.search.setText(_translate("chat", "Search"))
+        self.time.setText(_translate("chat", "Time"))
         self.translate.setText(_translate("chat", "Translate"))
         self.connect.setText(_translate("chat", "Connect"))
         for i in lang:
@@ -152,23 +167,6 @@ class Rmessage(QThread):
                 self.sinOut.emit(message)
             except:
                 pass
-
-    # def closeEvent(self, event):
-    #     """Generate 'question' dialog on clicking 'X' button in title bar.
-    #
-    #     Reimplement the closeEvent() event handler to include a 'Question'
-    #     dialog with options on how to proceed - Save, Close, Cancel buttons
-    #     """
-    #     reply = QMessageBox.question(
-    #         self, "Message",
-    #         "Are you sure you want to quit? Any unsaved work will be lost.",
-    #         QMessageBox.Save | QMessageBox.Close | QMessageBox.Cancel,
-    #         QMessageBox.Save)
-    #
-    #     if reply == QMessageBox.Close:
-    #         event.accept()
-    #     else:
-    #         event.ignore()
 # ------ test code ------
 # this part will not be called and is rewritten in log_in.py
 
