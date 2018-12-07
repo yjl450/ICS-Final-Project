@@ -12,6 +12,8 @@ import log_in as log
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import time
+import connect
 
 lang = {'Default(Eng)':'en', '简体中文':'zh', '繁體中文':'cht',\
             '日本語': 'jp', '한국어': 'kor' , 'Français': 'fra', 'Español': 'spa',\
@@ -84,6 +86,7 @@ class Ui_chat(object):
         font.setPointSize(12)
         self.connect.setFont(font)
         self.connect.setObjectName("connect")
+        self.connect.clicked.connect(lambda: self.connect_bnt())
         self.time = QtWidgets.QPushButton(chat)
         self.time.setGeometry(QtCore.QRect(440, 268, 141, 46))
         font = QtGui.QFont()
@@ -91,6 +94,7 @@ class Ui_chat(object):
         font.setPointSize(12)
         self.time.setFont(font)
         self.time.setObjectName("time")
+        self.time.clicked.connect(lambda: self.time_bnt())
         self.clear = QtWidgets.QPushButton(chat)
         self.clear.setGeometry(QtCore.QRect(440, 325, 141, 46))
         font = QtGui.QFont()
@@ -151,15 +155,40 @@ class Ui_chat(object):
         self.textBrowser.clear()
 
     def LangTrans(self):
-        toLang = self.TransLan.currentText()
-        langIdx = lang[toLang]
-        print(langIdx)
-        self.user.sm.set_language(langIdx)
-        lanmsg = "Following messages will be translated into:\n" + toLang
-        self.textBrowser.append('-' * 36)
-        self.textBrowser.append(lanmsg)
-        self.textBrowser.append('-' * 36)
+        if self.user.sm == 3:
+            toLang = self.TransLan.currentText()
+            langIdx = lang[toLang]
+            print(langIdx)
+            self.user.sm.set_language(langIdx)
+            lanmsg = "Following messages will be translated into:\n" + toLang
+            self.textBrowser.append('-' * 36)
+            self.textBrowser.append(lanmsg)
+            self.textBrowser.append('-' * 36)
+        else:
+            reply = QMessageBox.question(None, 'Translation', 'This function can only be used during chat.',
+                                         QMessageBox.No, QMessageBox.No)
 
+
+    def connect_bnt(self):
+        click.send_button(self.user, '$$$who')
+        time.sleep(0.1)
+        user_list = self.user.sm.list
+        del user_list[self.user.sm.me]
+        user_list = user_list.keys()
+        print(user_list)
+        connectWin = connect.Ui_Connect(user_list)
+        connectWin.click_connect()
+
+    def time_bnt(self):
+        if self.user.sm.state == 2:
+            click.send_button(self.user, '$$$time')
+            time.sleep(0.05)
+            print(self.user.sm.time)
+            reply = QMessageBox.question(None, 'Time', self.user.sm.time,
+                                         QMessageBox.Yes, QMessageBox.Yes)
+        else:
+            reply = QMessageBox.question(None, 'Time', 'This function can only be used when not chatting.',
+                                         QMessageBox.No, QMessageBox.No)
 
 class Chat(QtWidgets.QDialog):
     def __init__(self,user):

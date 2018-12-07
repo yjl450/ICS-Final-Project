@@ -86,10 +86,10 @@ class Group:
 
     def list_all(self, me):
         # a simple minded implementation
-        full_list = "Users: ------------" + "\n"
-        full_list += str(self.members) + "\n"
-        full_list += "Groups: -----------" + "\n"
-        full_list += str(self.chat_grps) + "\n"
+        # full_list = "Users: ------------" + "\n"
+        full_list = self.members #+ "\n"
+        # full_list += "Groups: -----------" + "\n"
+        # full_list += str(self.chat_grps) + "\n"
         return full_list
 
     def list_all2(self, me):

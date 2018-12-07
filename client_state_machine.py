@@ -16,6 +16,8 @@ class ClientSM:
         self.out_msg = ''
         self.s = s
         self.lang='en'
+        self.list={}
+        self.time = ''
 
     def set_state(self, state):
         self.state = state
@@ -74,13 +76,15 @@ class ClientSM:
                 elif my_msg == '$$$time':
                     mysend(self.s, json.dumps({"action":"time"}))
                     time_in = json.loads(myrecv(self.s))["results"]
-                    self.out_msg += "Time is: " + time_in
+                    self.time = "Time is: " + time_in
+                    print(self.time)
 
                 elif my_msg == '$$$who':
                     mysend(self.s, json.dumps({"action":"list"}))
                     logged_in = json.loads(myrecv(self.s))["results"]
-                    self.out_msg += 'Here are all the users in the system:\n'
-                    self.out_msg += logged_in
+                    self.list = logged_in
+                    # self.out_msg += 'Here are all the users in the system:\n'
+                    # self.out_msg += logged_in
 
                 elif my_msg[:4] == '$$$c':
                     peer = my_msg[4:]
