@@ -64,15 +64,8 @@ class Ui_chat(object):
         self.textBrowser.append('[me]'+text)
         self.textBrowser.append('')
         if text == 'q' and self.user.sm.state == 2:
-            reply = QMessageBox.question(None, 'Bye',
-                                         'See you next time!',
-                                         QMessageBox.Ok, QMessageBox.Ok)
-            if reply == QMessageBox.Ok:
-                self.user.console_input.append(text)
-                self.thread.quit()
-                self.chat.quit()
-
-                return
+            self.chat.close()
+            return
 
         #message =
         click.send_button(self.user, text)
