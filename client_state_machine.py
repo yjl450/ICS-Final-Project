@@ -59,23 +59,23 @@ class ClientSM:
             # todo: can't deal with multiple lines yet
             if len(my_msg) > 0:
 
-                if my_msg == 'q':
+                if my_msg == '$$$q':
                     self.out_msg += 'See you next time!\n'
                     self.state = S_OFFLINE
 
-                elif my_msg == 'time':
+                elif my_msg == '$time':
                     mysend(self.s, json.dumps({"action":"time"}))
                     time_in = json.loads(myrecv(self.s))["results"]
                     self.out_msg += "Time is: " + time_in
 
-                elif my_msg == 'who':
+                elif my_msg == '$who':
                     mysend(self.s, json.dumps({"action":"list"}))
                     logged_in = json.loads(myrecv(self.s))["results"]
                     self.out_msg += 'Here are all the users in the system:\n'
                     self.out_msg += logged_in
 
-                elif my_msg[0] == 'c':
-                    peer = my_msg[1:]
+                elif my_msg[:4] == '$$$c':
+                    peer = my_msg[4:]
                     peer = peer.strip()
                     if self.connect_to(peer) == True:
                         self.state = S_CHATTING
@@ -84,8 +84,8 @@ class ClientSM:
                     else:
                         self.out_msg += 'Connection unsuccessful\n'
 
-                elif my_msg[0] == '?':
-                    term = my_msg[1:].strip()
+                elif my_msg[:4] == '$$$?':
+                    term = my_msg[4:].strip()
                     mysend(self.s, json.dumps({"action":"search", "target":term}))
                     search_rslt = json.loads(myrecv(self.s))["results"].strip()
                     if (len(search_rslt)) > 0:
@@ -148,3 +148,6 @@ class ClientSM:
             print_state(self.state)
 
         return self.out_msg
+
+
+
