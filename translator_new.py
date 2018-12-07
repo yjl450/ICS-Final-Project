@@ -43,6 +43,8 @@ class Translator():
 
 if __name__ == '__main__':
     a=Translator()
-    b=a.translateBaidu('i love you','auto',)
+    word = input()
+    tolan = input()
+    b=a.translateBaidu(word,'auto', tolan)
     print(b)
 

@@ -126,7 +126,7 @@ class Server:
                     to_sock = self.logged_name2sock[g]
                     self.indices[g].add_msg_and_index(said2)
                     mysend(to_sock, json.dumps({"action":"exchange", "from":msg["from"], "message":msg["message"]}))
-                    mysend(to_sock, json.dump({'action':'translate','from':msg['from'],'message':msg["message"],'request':"do you want to translate it?"}))
+                    # mysend(to_sock, json.dumps({'action':'translate','from':msg['from'],'message':msg["message"],'request':"do you want to translate it?"}))
 #==============================================================================
 #                 listing available peers
 #==============================================================================
@@ -173,7 +173,8 @@ class Server:
                 if len(the_guys) == 1:  # only one left
                     g = the_guys.pop()
                     to_sock = self.logged_name2sock[g]
-                    mysend(to_sock, json.dumps({"action":"disconnect"}))
+                    mysend(to_sock, json.dumps(
+                        {"action": "disconnect", "msg": "Everyone left\nThis chat is ended."}))
 # ==============================================================================
 # now i am going to translate the message into different languages!
 # ==============================================================================

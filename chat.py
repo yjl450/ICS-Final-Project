@@ -115,15 +115,16 @@ class Ui_chat(object):
             self.TransLan.addItem(i)
         self.textBrowser.setHtml("\n++ Click \"Connect\" to chat with a friend.")
         self.textBrowser.append('++ Click \"Time\" to see current time.')
-        self.textBrowser.append('++ Click \"Search\" to search chat history.')
+        self.textBrowser.append('++ Click \"Search\" to search chat history.\n')
 
     def send_bnt_click(self):
         text = self.textEdit.toPlainText()
         self.textEdit.clear()
-        self.textBrowser.append('[me]'+text)
+        self.textBrowser.append('[me] '+text)
         self.textBrowser.append('')
-        if text == 'q' and self.user.sm.state == 2:
+        if text == '$$$q' and self.user.sm.state == 2:
             self.chat.close()
+            click.send_button(self.user, text)
             return
 
         #message =
@@ -133,7 +134,7 @@ class Ui_chat(object):
             #self.textBrowser.append(message)
 
         #message =
-        click.send_button(self.user, text)
+        # click.send_button(self.user, text)
 
         #if message!= '':
             #self.textBrowser.append(message)
@@ -150,7 +151,11 @@ class Ui_chat(object):
         toLang = self.TransLan.currentText()
         langIdx = lang[toLang]
         print(langIdx)
-        self.user.sm.set_language(langIdx)3
+        self.user.sm.set_language(langIdx)
+        lanmsg = "Following messages will be translated into:\n" + toLang
+        self.textBrowser.append('-' * 36)
+        self.textBrowser.append(lanmsg)
+        self.textBrowser.append('-' * 36)
 
 
 class Chat(QtWidgets.QDialog):
