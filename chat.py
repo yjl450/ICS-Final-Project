@@ -76,6 +76,7 @@ class Ui_chat(object):
         font.setPointSize(12)
         self.translate.setFont(font)
         self.translate.setObjectName("translate")
+        self.translate.clicked.connect(lambda: self.LangTrans())
         self.connect = QtWidgets.QPushButton(chat) # connet button
         self.connect.setGeometry(QtCore.QRect(440, 149, 141, 46))
         font = QtGui.QFont()
@@ -121,13 +122,15 @@ class Ui_chat(object):
         self.textEdit.clear()
         self.textBrowser.append('[me]'+text)
         self.textBrowser.append('')
-        if text == 'q' and self.user.state == 2:
-            reply = QMessageBox.question(None, 'Bye',
-                                         'See you next time!',
-                                         QMessageBox.Ok, QMessageBox.Ok)
-            if reply == QMessageBox.Ok:
-                self.chat.close()
-                return
+        if text == 'q' and self.user.sm.state == 2:
+            self.chat.close()
+            return
+
+        #message =
+        click.send_button(self.user, text)
+
+        #if message!= '':
+            #self.textBrowser.append(message)
 
         #message =
         click.send_button(self.user, text)
@@ -142,6 +145,30 @@ class Ui_chat(object):
 
     def clear_screen(self):
         self.textBrowser.clear()
+
+    def LangTrans(self):
+        toLang = self.TransLan.currentText()
+        langIdx = lang[toLang]
+        print(langIdx)
+        self.user.sm.set_language(langIdx)3
+
+
+class Chat(QtWidgets.QDialog):
+    def __init__(self,user):
+        super(Chat, self).__init__()
+        self.user = user
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', 'You sure to quit?',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+                self.user.sm.state = 2
+                event.accept()
+                self.user.console_input.append('q')
+        else:
+                event.ignore()
+
 
 class Rmessage(QThread):
     sinOut = pyqtSignal(str)
