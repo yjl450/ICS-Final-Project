@@ -5,6 +5,9 @@ Created on Sun Apr  5 00:00:32 2015
 """
 from chat_utils import *
 import json
+import translator_new as translator1
+from langdetect import detect
+
 
 class ClientSM:
     def __init__(self, s):
@@ -13,6 +16,7 @@ class ClientSM:
         self.me = ''
         self.out_msg = ''
         self.s = s
+        self.lang='en'
 
     def set_state(self, state):
         self.state = state
@@ -25,6 +29,9 @@ class ClientSM:
 
     def get_myname(self):
         return self.me
+
+    def set_language(self, lan):
+        self.lang = lan
 
     def connect_to(self, peer):
         msg = json.dumps({"action":"connect", "target":peer})
@@ -50,6 +57,7 @@ class ClientSM:
 
     def proc(self, my_msg, peer_msg):
         self.out_msg = ''
+
 #==============================================================================
 # Once logged in, do a few things: get peer listing, connect, search
 # And, of course, if you are so bored, just go
@@ -121,21 +129,32 @@ class ClientSM:
 # This is event handling instate "S_CHATTING"
 #==============================================================================
         elif self.state == S_CHATTING:
-            if len(my_msg) > 0:     # my stuff going out
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg}))
+            if len(my_msg) > 0:  # my stuff going out
+                # examine whether the message is english or not
+                mysend(self.s, json.dumps({"action": "exchange", "from": "[" + self.me + "]", "message": my_msg}))
                 if my_msg == 'bye':
                     self.disconnect()
                     self.state = S_LOGGEDIN
                     self.peer = ''
+
             if len(peer_msg) > 0:    # peer's stuff, coming in
+                # now you can choose to translate or not
+                translator = translator1.Translator()
                 peer_msg = json.loads(peer_msg)
                 if peer_msg["action"] == "connect":
                     self.out_msg += "(" + peer_msg["from"] + " joined)\n"
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
-                    self.out_msg += peer_msg["from"] + peer_msg["message"]
+                    pass
 
+                translation = translator.translateBaidu(peer_msg['message'],'auto', self.lang)
+                if translation.lower()==peer_msg['message'].lower():
+                    self.out_msg += peer_msg["from"] + peer_msg["message"]
+                    self.out_msg += "[translation]"
+                    self.out_msg += translation
+                else:
+                    self.out_msg += peer_msg["from"] + peer_msg["message"]
 
             # Display the menu again
             if self.state == S_LOGGEDIN:
