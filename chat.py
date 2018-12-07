@@ -68,9 +68,9 @@ class Ui_chat(object):
                                          'See you next time!',
                                          QMessageBox.Ok, QMessageBox.Ok)
             if reply == QMessageBox.Ok:
-                self.chat.close()
-                self.chat.quit()
                 self.user.console_input.append(text)
+                self.thread.quit()
+                self.chat.quit()
 
                 return
 
