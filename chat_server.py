@@ -175,6 +175,7 @@ class Server:
                     to_sock = self.logged_name2sock[g]
                     mysend(to_sock, json.dumps(
                         {"action": "disconnect", "msg": "Everyone left\nThis chat is ended."}))
+
 # ==============================================================================
 # now i am going to translate the message into different languages!
 # ==============================================================================

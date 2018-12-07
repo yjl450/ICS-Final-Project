@@ -139,7 +139,6 @@ class ClientSM:
                     self.disconnect()
                     self.state = S_LOGGEDIN
                     self.peer = ''
-
             if len(peer_msg) > 0:    # peer's stuff, coming in
                 # now you can choose to translate or not
                 translator = translator1.Translator()
@@ -149,15 +148,14 @@ class ClientSM:
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
-                    pass
+                    translation = translator.translateBaidu(peer_msg['message'], 'auto', self.lang)
+                    if translation.lower() != peer_msg['message'].lower():
+                        self.out_msg += peer_msg["from"] + ' ' + peer_msg["message"]
+                        self.out_msg += "\n[translation] "
+                        self.out_msg += translation
+                    else:
+                        self.out_msg += peer_msg["from"] + peer_msg["message"]
 
-                translation = translator.translateBaidu(peer_msg['message'],'auto', self.lang)
-                if translation.lower() != peer_msg['message'].lower():
-                    self.out_msg += peer_msg["from"] + ' ' + peer_msg["message"]
-                    self.out_msg += "\n[translation] "
-                    self.out_msg += translation
-                else:
-                    self.out_msg += peer_msg["from"] + peer_msg["message"]
 
             # Display the menu again
             if self.state == S_LOGGEDIN:

@@ -7,12 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import PyQt5
 import sys
-
-lang = {'Default(Eng)':'en', '简体中文':'zh', '繁體中文':'cht',\
-            '日本語': 'jp', '한국어': 'kor' , 'Français': 'fra', 'Español': 'spa',\
-            'لغة عربية': 'ara'}
 
 class Ui_Connect(object):
     def setupUi(self, Connect):
@@ -20,48 +15,58 @@ class Ui_Connect(object):
         Connect.resize(211, 237)
         Connect.setMinimumSize(QtCore.QSize(211, 237))
         Connect.setMaximumSize(QtCore.QSize(211, 237))
-        self.cancel = QtWidgets.QPushButton(Connect)
-        self.cancel.setGeometry(QtCore.QRect(60, 192, 81, 31))
+        self.peer = QtWidgets.QListWidget(Connect)
+        self.peer.setGeometry(QtCore.QRect(20, 21, 171, 111))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.cancel.setFont(font)
-        self.cancel.setObjectName("cancel")
-        self.con = QtWidgets.QPushButton(Connect)
-        self.con.setGeometry(QtCore.QRect(60, 150, 81, 31))
+        self.peer.setFont(font)
+        self.peer.setObjectName("peer")
+        item = QtWidgets.QListWidgetItem()
+        self.peer.addItem(item)
+        self.pushButton = QtWidgets.QPushButton(Connect)
+        self.pushButton.setGeometry(QtCore.QRect(60, 192, 81, 31))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.con.setFont(font)
-        self.con.setObjectName("con")
-        self.Peer = QtWidgets.QScrollArea(Connect)
-        self.Peer.setGeometry(QtCore.QRect(20, 21, 171, 111))
-        self.Peer.setFocusPolicy(QtCore.Qt.WheelFocus)
-        self.Peer.setWidgetResizable(False)
-        self.Peer.setObjectName("Peer")
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 169, 109))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        for i in lang:
-            self.radioButton = QtWidgets.QRadioButton(Connect)
-            font = QtGui.QFont()
-            font.setFamily("Calibri")
-            font.setPointSize(12)
-            self.radioButton.setFont(font)
-            self.radioButton.setObjectName(i)
-            self.radioButton.setText(_translate("Connect", i))
-            self.Peer.addScrollBarWidget()
-        self.Peer.setWidget(self.scrollAreaWidgetContents)
+        self.pushButton.setFont(font)
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(Connect)
+        self.pushButton_2.setGeometry(QtCore.QRect(60, 150, 81, 31))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.pushButton_2.setFont(font)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.radioButton = QtWidgets.QRadioButton(Connect)
+        self.radioButton.setGeometry(QtCore.QRect(0, 140, 89, 16))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.radioButton.setFont(font)
+        self.radioButton.setObjectName("radioButton")
 
         self.retranslateUi(Connect)
         QtCore.QMetaObject.connectSlotsByName(Connect)
 
     def retranslateUi(self, Connect):
         _translate = QtCore.QCoreApplication.translate
-        Connect.setWindowTitle(_translate("self", "Peers"))
-
-        self.cancel.setText(_translate("Connect", "Cancel"))
-        self.con.setText(_translate("Connect", "Connect"))
+        Connect.setWindowTitle(_translate("Connect", "Dialog"))
+        __sortingEnabled = self.peer.isSortingEnabled()
+        self.peer.setSortingEnabled(False)
+        # item = self.peer.item(0)
+        # item.setText(_translate("Connect", "qof"))
+        for i in user_list:
+            self.radioButton = QtWidgets.QRadioButton(Connect)
+            font = QtGui.QFont()
+            font.setFamily("Calibri")
+            font.setPointSize(12)
+            self.radioButton.setFont(font)
+            self.radioButton.setObjectName(i)
+            self.peer.addItem(self.radioButton)
+        self.peer.setSortingEnabled(__sortingEnabled)
+        self.pushButton.setText(_translate("Connect", "Cancel"))
+        self.pushButton_2.setText(_translate("Connect", "Connect"))
         self.radioButton.setText(_translate("Connect", "RadioButton"))
 
 def main():

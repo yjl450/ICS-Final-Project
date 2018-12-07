@@ -115,7 +115,10 @@ class Ui_chat(object):
             self.TransLan.addItem(i)
         self.textBrowser.setHtml("\n++ Click \"Connect\" to chat with a friend.")
         self.textBrowser.append('++ Click \"Time\" to see current time.')
-        self.textBrowser.append('++ Click \"Search\" to search chat history.\n')
+        self.textBrowser.append('++ Click \"Search\" to search chat history.')
+        self.textBrowser.append('++ Click \"Clear\" to clear message display.\n')
+
+
 
     def send_bnt_click(self):
         text = self.textEdit.toPlainText()
