@@ -112,13 +112,9 @@ class Ui_chat(object):
         self.connect.setText(_translate("chat", "Connect"))
         for i in lang:
             self.TransLan.addItem(i)
-        self.textBrowser.setHtml("\n++++ Choose one of the following commands")
-        self.textBrowser.append('time: calendar time in the system')
-        self.textBrowser.append('who: to find out who else are there')
-        self.textBrowser.append('c _peer_: to connect to the _peer_ and chat')
-        self.textBrowser.append(' ? _term_: to search your chat logs where _term_ appears')
-        self.textBrowser.append('p _#_: to get number <#> sonnet')
-        self.textBrowser.append('q: to leave the chat system\n')
+        self.textBrowser.setHtml("\n++ Click \"Connect\" to chat with a friend.")
+        self.textBrowser.append('++ Click \"Time\" to see current time.')
+        self.textBrowser.append('++ Click \"Search\" to search chat history.')
 
     def send_bnt_click(self):
         text = self.textEdit.toPlainText()

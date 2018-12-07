@@ -9,10 +9,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 
-lang = {'Default(Eng)':'en', '简体中文':'zh', '繁體中文':'cht',\
-            '日本語': 'jp', '한국어': 'kor' , 'Français': 'fra', 'Español': 'spa',\
-            'لغة عربية': 'ara'}
-
 class Ui_Connect(object):
     def setupUi(self, Connect):
         Connect.setObjectName("Connect")
@@ -60,7 +56,7 @@ class Ui_Connect(object):
         self.peer.setSortingEnabled(False)
         # item = self.peer.item(0)
         # item.setText(_translate("Connect", "qof"))
-        for i in lang:
+        for i in user_list:
             self.radioButton = QtWidgets.QRadioButton(Connect)
             font = QtGui.QFont()
             font.setFamily("Calibri")
