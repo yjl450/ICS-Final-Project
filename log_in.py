@@ -93,7 +93,8 @@ class Ui_log_in(object):
                                              QMessageBox.Ok, QMessageBox.Ok)
                 if reply == QMessageBox.Ok:
                     self.login.close()
-                    form2 = QtWidgets.QDialog()
+                    #form2 = QtWidgets.QDialog()
+                    form2 = chat.Chat(user)
                     ui = chat.Ui_chat(user)
                     ui.setupUi(form2)
                     form2.show()

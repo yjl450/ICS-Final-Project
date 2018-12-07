@@ -63,12 +63,15 @@ class Ui_chat(object):
         self.textEdit.clear()
         self.textBrowser.append('[me]'+text)
         self.textBrowser.append('')
-        if text == 'q' and self.user.state == 2:
+        if text == 'q' and self.user.sm.state == 2:
             reply = QMessageBox.question(None, 'Bye',
                                          'See you next time!',
                                          QMessageBox.Ok, QMessageBox.Ok)
             if reply == QMessageBox.Ok:
                 self.chat.close()
+                self.chat.quit()
+                self.user.console_input.append(text)
+
                 return
 
         #message =
@@ -82,6 +85,22 @@ class Ui_chat(object):
             self.textBrowser.append(msg)
             self.textBrowser.append('  ')
 
+
+class Chat(QtWidgets.QDialog):
+    def __init__(self,user):
+        super(Chat, self).__init__()
+        self.user = user
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', 'You sure to quit?',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+                self.user.sm.state = 2
+                event.accept()
+                self.user.console_input.append('q')
+        else:
+                event.ignore()
 
 
 class Rmessage(QThread):
