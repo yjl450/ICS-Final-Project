@@ -56,6 +56,7 @@ class Ui_chat(object):
         font.setPointSize(12)
         self.search.setFont(font)
         self.search.setObjectName("search")
+        self.search.clicked.connect(lambda: self.search_bnt())
         self.textBrowser = QtWidgets.QTextBrowser(chat) # Message Display
         self.textBrowser.setGeometry(QtCore.QRect(40, 30, 361, 341))
         font = QtGui.QFont()
@@ -191,6 +192,9 @@ class Ui_chat(object):
         else:
             reply = QMessageBox.question(None, 'Time', 'This function can only be used when not chatting.',
                                          QMessageBox.OK, QMessageBox.OK)
+
+    def search_bnt(self):
+        #todo
 
 
 
