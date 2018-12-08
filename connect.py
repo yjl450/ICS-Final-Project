@@ -20,7 +20,7 @@ class Ui_Connect(object):
         Connect.setMinimumSize(QtCore.QSize(230, 250))
         Connect.setMaximumSize(QtCore.QSize(230, 250))
         self.confirm = QtWidgets.QDialogButtonBox(Connect)
-        self.confirm.setGeometry(QtCore.QRect(0, 195, 193, 28))
+        self.confirm.setGeometry(QtCore.QRect(19, 195, 193, 28))
         self.confirm.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.confirm.setObjectName("confirm")
         self.widget = QtWidgets.QWidget(Connect)
@@ -67,8 +67,8 @@ class Ui_Connect(object):
 
     def retranslateUi(self, Connect):
         _translate = QtCore.QCoreApplication.translate
-        Connect.setWindowTitle(_translate("Connect", "Dialog"))
-        self.info.setText(_translate("Connect", "Select a peer to chat!"))
+        Connect.setWindowTitle(_translate("Connect", "Connect"))
+        self.info.setText(_translate("Connect", "Select a peer!"))
         for radio in self.radio.keys():
             radio.setText(_translate("Connect", self.radio[radio]))
         # self.radioButton_2.setText(_translate("Connect", "Amanda"))

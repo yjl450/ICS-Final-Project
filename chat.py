@@ -170,14 +170,16 @@ class Ui_chat(object):
 
 
     def connect_bnt(self):
-        click.send_button(self.user, '$$$who')
-        time.sleep(0.1)
-        user_list = self.user.sm.list
-        del user_list[self.user.sm.me]
-        user_list = user_list.keys()
-        print(user_list)
-        connectWin = connect.Ui_Connect(user_list)
-        connectWin.click_connect()
+        if self.user.sm.state == 2:
+            click.send_button(self.user, '$$$who')
+            time.sleep(0.1)
+            user_list = self.user.sm.list
+            del user_list[self.user.sm.me]
+            user_list = user_list.keys() # 获得了不含自己的用户列表
+            print(user_list)
+            connectWin = connect.Ui_Connect(user_list)
+            connectWin.click_connect()
+
 
     def time_bnt(self):
         if self.user.sm.state == 2:
@@ -189,6 +191,8 @@ class Ui_chat(object):
         else:
             reply = QMessageBox.question(None, 'Time', 'This function can only be used when not chatting.',
                                          QMessageBox.No, QMessageBox.No)
+
+    def
 
 class Chat(QtWidgets.QDialog):
     def __init__(self,user):
