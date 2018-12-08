@@ -166,7 +166,7 @@ class Ui_chat(object):
             self.textBrowser.append('-' * 36)
         else:
             reply = QMessageBox.question(None, 'Translation', 'This function can only be used during chat.',
-                                         QMessageBox.No, QMessageBox.No)
+                                         QMessageBox.OK, QMessageBox.OK)
 
 
     def connect_bnt(self):
@@ -190,9 +190,9 @@ class Ui_chat(object):
                                          QMessageBox.Yes, QMessageBox.Yes)
         else:
             reply = QMessageBox.question(None, 'Time', 'This function can only be used when not chatting.',
-                                         QMessageBox.No, QMessageBox.No)
+                                         QMessageBox.OK, QMessageBox.OK)
 
-    def
+
 
 class Chat(QtWidgets.QDialog):
     def __init__(self,user):

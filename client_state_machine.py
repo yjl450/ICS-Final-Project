@@ -101,9 +101,12 @@ class ClientSM:
                     mysend(self.s, json.dumps({"action":"search", "target":term}))
                     search_rslt = json.loads(myrecv(self.s))["results"].strip()
                     if (len(search_rslt)) > 0:
-                        self.out_msg += search_rslt + '\n\n'
+                        self.search = search_rslt
+                        # self.out_msg += search_rslt + '\n\n'
                     else:
-                        self.out_msg += '\'' + term + '\'' + ' not found\n\n'
+                        self.search = False
+                        # self.out_msg += '\'' + term + '\'' + ' not found\n\n'
+                    print(self.search)
 
                 elif my_msg[0] == 'p' and my_msg[1:].isdigit():
                     poem_idx = my_msg[1:].strip()
