@@ -3,5 +3,3 @@ __pycache__/
 .idea/
 *.idx
 facelib/
-*.txt
-*.bat

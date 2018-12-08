@@ -14,6 +14,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import time
 import connect
+import search
 
 lang = {'Default(Eng)':'en', '简体中文':'zh', '繁體中文':'cht',\
             '日本語': 'jp', '한국어': 'kor' , 'Français': 'fra', 'Español': 'spa',\
@@ -56,7 +57,7 @@ class Ui_chat(object):
         font.setPointSize(12)
         self.search.setFont(font)
         self.search.setObjectName("search")
-        self.search.clicked.connect(lambda: self.search_bnt())
+        self.search.clicked.connect(lambda:self.search_bnt())
         self.textBrowser = QtWidgets.QTextBrowser(chat) # Message Display
         self.textBrowser.setGeometry(QtCore.QRect(40, 30, 361, 341))
         font = QtGui.QFont()
@@ -167,7 +168,7 @@ class Ui_chat(object):
             self.textBrowser.append('-' * 36)
         else:
             reply = QMessageBox.question(None, 'Translation', 'This function can only be used during chat.',
-                                         QMessageBox.OK, QMessageBox.OK)
+                                         QMessageBox.Ok, QMessageBox.Ok)
 
 
     def connect_bnt(self):
@@ -177,9 +178,14 @@ class Ui_chat(object):
             user_list = self.user.sm.list
             del user_list[self.user.sm.me]
             user_list = user_list.keys() # 获得了不含自己的用户列表
-            print(user_list)
-            connectWin = connect.Ui_Connect(user_list)
-            connectWin.click_connect()
+            connect_list = QtWidgets.QDialog()
+            ui = connect.Ui_Connect(user_list,self.user)
+            ui.setupUi(connect_list)
+            connect_list.show()
+            connect_list.exec_()
+            # print(user_list)
+            # connectWin = connect.Ui_Connect(user_list)
+            # connectWin.click_connect()
 
 
     def time_bnt(self):
@@ -188,13 +194,22 @@ class Ui_chat(object):
             time.sleep(0.05)
             print(self.user.sm.time)
             reply = QMessageBox.question(None, 'Time', self.user.sm.time,
-                                         QMessageBox.Yes, QMessageBox.Yes)
+                                         QMessageBox.Ok, QMessageBox.Ok)
         else:
             reply = QMessageBox.question(None, 'Time', 'This function can only be used when not chatting.',
-                                         QMessageBox.OK, QMessageBox.OK)
+                                         QMessageBox.Ok, QMessageBox.Ok)
 
     def search_bnt(self):
-        #todo
+        if self.user.sm.state == 2:
+            search_list = QtWidgets.QDialog()
+            ui = search.Ui_SearchHistory(self.user)
+            ui.setupUi(search_list)
+            search_list.show()
+            search_list.exec_()
+        else:
+            QMessageBox.question(None, 'Search', 'You cannot use this function while chatting.',
+                                 QMessageBox.Ok, QMessageBox.Ok)
+
 
 
 

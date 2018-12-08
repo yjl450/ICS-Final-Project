@@ -7,6 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 import sys
 import botton_click as click
 import time
@@ -68,7 +70,7 @@ class Ui_SearchHistory(object):
             self.result.append(result)
         else:
             reply = QMessageBox.question(None, 'Search', 'Cannot find anything in chat history.',
-                                         QMessageBox.OK, QMessageBox.OK)
+                                         QMessageBox.Ok, QMessageBox.Ok)
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

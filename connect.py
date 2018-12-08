@@ -7,14 +7,18 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 import sys
 
 class Ui_Connect(object):
-    def __init__(self, list):
+    def __init__(self, list,user):
         self.list = list
         self.radio = {}
+        self.user = user
 
     def setupUi(self, Connect):
+        self.connect = Connect
         Connect.setObjectName("Connect")
         Connect.resize(230, 250)
         Connect.setMinimumSize(QtCore.QSize(230, 250))
@@ -23,6 +27,8 @@ class Ui_Connect(object):
         self.confirm.setGeometry(QtCore.QRect(19, 195, 193, 28))
         self.confirm.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.confirm.setObjectName("confirm")
+        self.confirm.accepted.connect(self.ok_button_click)
+        self.confirm.rejected.connect(self.cancel_button_click)
         self.widget = QtWidgets.QWidget(Connect)
         self.widget.setGeometry(QtCore.QRect(38, 20, 154, 151))
         self.widget.setObjectName("widget")
@@ -87,6 +93,27 @@ class Ui_Connect(object):
 
     def click_connect(self):
         self.show()
+
+    def ok_button_click(self):
+        botton = ''
+        for i in  self.radio.keys():
+            if i.toggled:
+                botton = i
+        if botton  == '':
+            QMessageBox.question(self, 'Message', 'Please select a peer!',
+                                QMessageBox.Ok | QMessageBox.Ok)
+        else:
+            peer = self.radio[i]
+            text = '$$$c'+str(peer)
+            self.user.console_input.append(text)
+            self.connect.close()
+
+
+
+
+    def cancel_button_click(self):
+        self.connect.close()
+
 
 
 
