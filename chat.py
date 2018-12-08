@@ -12,59 +12,128 @@ import log_in as log
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import time
+import connect
+import search
+
+lang = {'Default(Eng)':'en', '简体中文':'zh', '繁體中文':'cht',\
+            '日本語': 'jp', '한국어': 'kor' , 'Français': 'fra', 'Español': 'spa',\
+            'لغة عربية': 'ara'}
 
 class Ui_chat(object):
-    def __init__(self,user):
+    def __init__(self, user):
         self.user = user
         self.thread = Rmessage(self.user)
         self.thread.start()
         self.thread.sinOut.connect(self.rec_msg)
 
     def setupUi(self, chat):
-        chat.setObjectName("chat")
-        chat.resize(541, 384)
+        chat.setObjectName("Chat") # whole window
+        chat.resize(613, 590)
         self.chat = chat
-        self.textEdit = QtWidgets.QTextEdit(chat)
-        self.textEdit.setGeometry(QtCore.QRect(30, 250, 361, 111))
+        chat.setMinimumSize(QtCore.QSize(613, 590))
+        chat.setMaximumSize(QtCore.QSize(613, 590))
+        self.textEdit = QtWidgets.QTextEdit(chat) # Input Box
+        self.textEdit.setGeometry(QtCore.QRect(40, 410, 361, 141))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.textEdit.setFont(font)
+        self.textEdit.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.textEdit.setObjectName("textEdit")
-        self.pushButton = QtWidgets.QPushButton(chat)
-        self.pushButton.setGeometry(QtCore.QRect(410, 280, 114, 32))
+        self.pushButton = QtWidgets.QPushButton(chat) # Send Button
+        self.pushButton.setGeometry(QtCore.QRect(440, 410, 141, 141))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.pushButton.setFont(font)
         self.pushButton.setCheckable(False)
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(lambda:self.send_bnt_click())
-        self.pushButton_2 = QtWidgets.QPushButton(chat)
-        self.pushButton_2.setGeometry(QtCore.QRect(410, 320, 114, 32))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.textBrowser = QtWidgets.QTextBrowser(chat)
-        self.textBrowser.setGeometry(QtCore.QRect(30, 20, 361, 221))
+        self.pushButton.clicked.connect(lambda: self.send_bnt_click())
+        self.search = QtWidgets.QPushButton(chat) # Clear Button
+        self.search.setGeometry(QtCore.QRect(440, 208, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.search.setFont(font)
+        self.search.setObjectName("search")
+        self.search.clicked.connect(lambda:self.search_bnt())
+        self.textBrowser = QtWidgets.QTextBrowser(chat) # Message Display
+        self.textBrowser.setGeometry(QtCore.QRect(40, 30, 361, 341))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.textBrowser.setFont(font)
+        self.textBrowser.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.textBrowser.setObjectName("textBrowser")
-        self.textBrowser_2 = QtWidgets.QTextBrowser(chat)
-        self.textBrowser_2.setGeometry(QtCore.QRect(410, 20, 111, 241))
-        self.textBrowser_2.setObjectName("textBrowser_2")
-
+        self.TransLan = QtWidgets.QComboBox(chat) # translation language
+        self.TransLan.setGeometry(QtCore.QRect(440, 30, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.TransLan.setFont(font)
+        self.TransLan.setObjectName("TransLan")
+        self.translate = QtWidgets.QPushButton(chat) # translate button
+        self.translate.setGeometry(QtCore.QRect(440, 90, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.translate.setFont(font)
+        self.translate.setObjectName("translate")
+        self.translate.clicked.connect(lambda: self.LangTrans())
+        self.connect = QtWidgets.QPushButton(chat) # connet button
+        self.connect.setGeometry(QtCore.QRect(440, 149, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.connect.setFont(font)
+        self.connect.setObjectName("connect")
+        self.connect.clicked.connect(lambda: self.connect_bnt())
+        self.time = QtWidgets.QPushButton(chat)
+        self.time.setGeometry(QtCore.QRect(440, 268, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.time.setFont(font)
+        self.time.setObjectName("time")
+        self.time.clicked.connect(lambda: self.time_bnt())
+        self.clear = QtWidgets.QPushButton(chat)
+        self.clear.setGeometry(QtCore.QRect(440, 325, 141, 46))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.clear.setFont(font)
+        self.clear.setObjectName("clear")
+        self.clear.clicked.connect(lambda: self.clear_screen())
         self.retranslateUi(chat)
         QtCore.QMetaObject.connectSlotsByName(chat)
 
     def retranslateUi(self, chat):
         _translate = QtCore.QCoreApplication.translate
         chat.setWindowTitle(_translate("chat", "Chat"))
-        self.pushButton.setText(_translate("chat", "send"))
-        self.pushButton_2.setText(_translate("chat", "clear"))
-        self.textBrowser.setHtml("\n++++ Choose one of the following commands")
-        self.textBrowser.append('time: calendar time in the system')
-        self.textBrowser.append('who: to find out who else are there')
-        self.textBrowser.append('c _peer_: to connect to the _peer_ and chat')
-        self.textBrowser.append(' ? _term_: to search your chat logs where _term_ appears')
-        self.textBrowser.append('p _#_: to get number <#> sonnet')
-        self.textBrowser.append('q: to leave the chat system\n')
+        self.pushButton.setText(_translate("chat", "Send"))
+        self.clear.setText(_translate("chat", "Clear"))
+        self.search.setText(_translate("chat", "Search"))
+        self.time.setText(_translate("chat", "Time"))
+        self.translate.setText(_translate("chat", "Translate"))
+        self.connect.setText(_translate("chat", "Connect"))
+        for i in lang:
+            self.TransLan.addItem(i)
+        self.textBrowser.setHtml("\n++ Click \"Connect\" to chat with a friend.")
+        self.textBrowser.append('++ Click \"Time\" to see current time.')
+        self.textBrowser.append('++ Click \"Search\" to search chat history.')
+        self.textBrowser.append('++ Click \"Clear\" to clear message display.\n')
+
+
 
     def send_bnt_click(self):
         text = self.textEdit.toPlainText()
         self.textEdit.clear()
-        self.textBrowser.append('[me]'+text)
+        self.textBrowser.append('[me] '+text)
         self.textBrowser.append('')
-        if text == 'q' and self.user.sm.state == 2:
+        if text == '$$$q' and self.user.sm.state == 2:
             self.chat.close()
+            click.send_button(self.user, text)
             return
 
         #message =
@@ -73,10 +142,75 @@ class Ui_chat(object):
         #if message!= '':
             #self.textBrowser.append(message)
 
-    def rec_msg(self,msg):
-        if msg!= '':
+        #message =
+        # click.send_button(self.user, text)
+
+        #if message!= '':
+            #self.textBrowser.append(message)
+
+    def rec_msg(self, msg):
+        if msg != '':
             self.textBrowser.append(msg)
             self.textBrowser.append('  ')
+
+    def clear_screen(self):
+        self.textBrowser.clear()
+
+    def LangTrans(self):
+        if self.user.sm.state == 3:
+            toLang = self.TransLan.currentText()
+            langIdx = lang[toLang]
+            print(langIdx)
+            self.user.sm.set_language(langIdx)
+            lanmsg = "Following messages will be translated into:\n" + toLang
+            self.textBrowser.append('-' * 36)
+            self.textBrowser.append(lanmsg)
+            self.textBrowser.append('-' * 36)
+        else:
+            reply = QMessageBox.question(None, 'Translation', 'This function can only be used during chat.',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+
+
+    def connect_bnt(self):
+        if self.user.sm.state == 2:
+            click.send_button(self.user, '$$$who')
+            time.sleep(0.1)
+            user_list = self.user.sm.list
+            del user_list[self.user.sm.me]
+            user_list = user_list.keys() # 获得了不含自己的用户列表
+            connect_list = QtWidgets.QDialog()
+            ui = connect.Ui_Connect(user_list,self.user)
+            ui.setupUi(connect_list)
+            connect_list.show()
+            connect_list.exec_()
+            # print(user_list)
+            # connectWin = connect.Ui_Connect(user_list)
+            # connectWin.click_connect()
+
+
+    def time_bnt(self):
+        if self.user.sm.state == 2:
+            click.send_button(self.user, '$$$time')
+            time.sleep(0.05)
+            print(self.user.sm.time)
+            reply = QMessageBox.question(None, 'Time', self.user.sm.time,
+                                         QMessageBox.Ok, QMessageBox.Ok)
+        else:
+            reply = QMessageBox.question(None, 'Time', 'This function can only be used when not chatting.',
+                                         QMessageBox.Ok, QMessageBox.Ok)
+
+    def search_bnt(self):
+        if self.user.sm.state == 2:
+            search_list = QtWidgets.QDialog()
+            ui = search.Ui_SearchHistory(self.user)
+            ui.setupUi(search_list)
+            search_list.show()
+            search_list.exec_()
+        else:
+            QMessageBox.question(None, 'Search', 'You cannot use this function while chatting.',
+                                 QMessageBox.Ok, QMessageBox.Ok)
+
+
 
 
 class Chat(QtWidgets.QDialog):
@@ -116,7 +250,6 @@ class Rmessage(QThread):
                 self.sinOut.emit(message)
             except:
                 pass
-
 # ------ test code ------
 # this part will not be called and is rewritten in log_in.py
 
@@ -136,4 +269,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-#----- test code end ------
+# ----- test code end ------

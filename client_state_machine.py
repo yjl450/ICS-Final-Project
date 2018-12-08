@@ -1,10 +1,12 @@
 """
 Created on Sun Apr  5 00:00:32 2015
-
 @author: zhengzhang
 """
 from chat_utils import *
 import json
+import translator_new as translator1
+# from langdetect import detect
+
 
 class ClientSM:
     def __init__(self, s):
@@ -13,6 +15,10 @@ class ClientSM:
         self.me = ''
         self.out_msg = ''
         self.s = s
+        self.lang='en'
+        self.list={}
+        self.time = ''
+        self.search = []
 
     def set_state(self, state):
         self.state = state
@@ -25,6 +31,10 @@ class ClientSM:
 
     def get_myname(self):
         return self.me
+
+    def set_language(self, lan):
+        print('***',lan)
+        self.lang = lan
 
     def connect_to(self, peer):
         msg = json.dumps({"action":"connect", "target":peer})
@@ -50,6 +60,7 @@ class ClientSM:
 
     def proc(self, my_msg, peer_msg):
         self.out_msg = ''
+
 #==============================================================================
 # Once logged in, do a few things: get peer listing, connect, search
 # And, of course, if you are so bored, just go
@@ -59,39 +70,43 @@ class ClientSM:
             # todo: can't deal with multiple lines yet
             if len(my_msg) > 0:
 
-                if my_msg == 'q':
+                if my_msg == '$$$q':
                     self.out_msg += 'See you next time!\n'
                     self.state = S_OFFLINE
 
-                elif my_msg == 'time':
+                elif my_msg == '$$$time':
                     mysend(self.s, json.dumps({"action":"time"}))
                     time_in = json.loads(myrecv(self.s))["results"]
-                    self.out_msg += "Time is: " + time_in
+                    self.time = "Time is: " + time_in
+                    print(self.time)
 
-                elif my_msg == 'who':
+                elif my_msg == '$$$who':
                     mysend(self.s, json.dumps({"action":"list"}))
                     logged_in = json.loads(myrecv(self.s))["results"]
-                    self.out_msg += 'Here are all the users in the system:\n'
-                    self.out_msg += logged_in
+                    self.list = logged_in
+                    # self.out_msg += 'Here are all the users in the system:\n'
+                    # self.out_msg += logged_in
 
-                elif my_msg[0] == 'c':
-                    peer = my_msg[1:]
+                elif my_msg[:4] == '$$$c':
+                    peer = my_msg[4:]
                     peer = peer.strip()
                     if self.connect_to(peer) == True:
                         self.state = S_CHATTING
-                        self.out_msg += 'Connect to ' + peer + '. Chat away!\n\n'
-                        self.out_msg += '-----------------------------------\n'
+                        self.out_msg += 'Connect to ' + peer + '. Chat away!\n'
+                        self.out_msg += '-----------------------------------'
                     else:
                         self.out_msg += 'Connection unsuccessful\n'
 
-                elif my_msg[0] == '?':
-                    term = my_msg[1:].strip()
-                    mysend(self.s, json.dumps({"action":"search", "target":term}))
+                elif my_msg[:4] == '$$$?':
+                    term = my_msg[4:].strip()
+                    mysend(self.s, json.dumps({"action": "search", "target": term}))
                     search_rslt = json.loads(myrecv(self.s))["results"].strip()
                     if (len(search_rslt)) > 0:
-                        self.out_msg += search_rslt + '\n\n'
+                        self.search = search_rslt
+
+                # self.out_msg += search_rslt + '\n\n'
                     else:
-                        self.out_msg += '\'' + term + '\'' + ' not found\n\n'
+                        self.search = False
 
                 elif my_msg[0] == 'p' and my_msg[1:].isdigit():
                     poem_idx = my_msg[1:].strip()
@@ -113,7 +128,7 @@ class ClientSM:
                     self.out_msg += 'Request from ' + self.peer + '\n'
                     self.out_msg += 'You are connected with ' + self.peer
                     self.out_msg += '. Chat away!\n\n'
-                    self.out_msg += '------------------------------------\n'
+                    self.out_msg += '------------------------------------'
                     self.state = S_CHATTING
 
 #==============================================================================
@@ -121,20 +136,32 @@ class ClientSM:
 # This is event handling instate "S_CHATTING"
 #==============================================================================
         elif self.state == S_CHATTING:
-            if len(my_msg) > 0:     # my stuff going out
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg}))
+            if '$$$' in my_msg:
+                my_msg = ''
+
+            if len(my_msg) > 0:  # my stuff going out
+                # examine whether the message is english or not
+                mysend(self.s, json.dumps({"action": "exchange", "from": "[" + self.me + "]", "message": my_msg}))
                 if my_msg == 'bye':
                     self.disconnect()
                     self.state = S_LOGGEDIN
                     self.peer = ''
             if len(peer_msg) > 0:    # peer's stuff, coming in
+                # now you can choose to translate or not
+                translator = translator1.Translator()
                 peer_msg = json.loads(peer_msg)
                 if peer_msg["action"] == "connect":
                     self.out_msg += "(" + peer_msg["from"] + " joined)\n"
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
-                    self.out_msg += peer_msg["from"] + peer_msg["message"]
+                    translation = translator.translateBaidu(peer_msg['message'], 'auto', self.lang)
+                    if translation.lower() != peer_msg['message'].lower():
+                        self.out_msg += peer_msg["from"] + ' ' + peer_msg["message"]
+                        self.out_msg += "\n[translation] "
+                        self.out_msg += translation
+                    else:
+                        self.out_msg += peer_msg["from"] + peer_msg["message"]
 
 
             # Display the menu again
