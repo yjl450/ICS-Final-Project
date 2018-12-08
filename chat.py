@@ -155,7 +155,7 @@ class Ui_chat(object):
         self.textBrowser.clear()
 
     def LangTrans(self):
-        if self.user.sm == 3:
+        if self.user.sm.state == 3:
             toLang = self.TransLan.currentText()
             langIdx = lang[toLang]
             print(langIdx)
