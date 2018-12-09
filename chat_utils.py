@@ -11,7 +11,6 @@ else:
 
 # CHAT_IP = '192.168.137.86'
 
-
 CHAT_PORT = 1112
 SERVER = (CHAT_IP, CHAT_PORT)
 
