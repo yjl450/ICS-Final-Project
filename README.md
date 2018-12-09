@@ -27,7 +27,7 @@ How it works
 -----------------------
 Before logging in, register your face with an image containing a clear face of yours and your username.
 <div align="center">
-  <img src = "https://github.com/yjl450/ICS-Final-Project/blob/master/Presentation/login.png" width = "400"/>
+  <img src = "https://github.com/yjl450/ICS-Final-Project/blob/master/Presentation/login1.png" width = "400"/>
 </div>  
 
 
