@@ -100,7 +100,7 @@ class Ui_Connect(object):
             if i.toggled:
                 botton = i
         if botton  == '':
-            QMessageBox.question(self, 'Message', 'Please select a peer!',
+            QMessageBox.question(None, 'Message', 'Please select a peer!',
                                 QMessageBox.Ok | QMessageBox.Ok)
         else:
             peer = self.radio[i]

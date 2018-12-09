@@ -135,8 +135,6 @@ class Ui_chat(object):
             self.chat.close()
             click.send_button(self.user, text)
             return
-
-        #message =
         click.send_button(self.user, text)
 
         #if message!= '':
@@ -225,7 +223,7 @@ class Chat(QtWidgets.QDialog):
         if reply == QMessageBox.Yes:
                 self.user.sm.state = 2
                 event.accept()
-                self.user.console_input.append('q')
+                self.user.console_input.append('$$$q')
         else:
                 event.ignore()
 
