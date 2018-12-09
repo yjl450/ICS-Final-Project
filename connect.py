@@ -95,15 +95,16 @@ class Ui_Connect(object):
         self.show()
 
     def ok_button_click(self):
-        botton = ''
-        for i in  self.radio.keys():
-            if i.toggled:
-                botton = i
-        if botton  == '':
+        button = ''
+        for i in self.radio.keys():
+            if i.isChecked:
+                button = i
+                break
+        if button  == '':
             QMessageBox.question(None, 'Message', 'Please select a peer!',
                                 QMessageBox.Ok | QMessageBox.Ok)
         else:
-            peer = self.radio[i]
+            peer = self.radio[button]
             text = '$$$c'+str(peer)
             self.user.console_input.append(text)
             self.connect.close()
