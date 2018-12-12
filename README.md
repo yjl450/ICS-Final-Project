@@ -24,7 +24,9 @@ Install by `pip3 install langdetect`
 [Baidu Translation API](http://api.fanyi.baidu.com) for auto translation.  
 
 How it works
------------------------
+-----------------------  
+**In terminal, enter `python log_in.py` to launch our chat system.**
+
 Before logging in, register your face with an image containing a clear face of yours and your username.
 <div align="center">
   <img src = "https://github.com/yjl450/ICS-Final-Project/blob/master/Presentation/login1.png" width = "400"/>
